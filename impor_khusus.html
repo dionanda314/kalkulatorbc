@@ -85,7 +85,7 @@
         
         <div class="input-group">
             <label>Jumlah Satuan Barang:</label>
-            <input type="number" id="jumlah">
+            <input type="number" id="jumlah" placeholder="Masukkan jumlah satuan barang" min="0" step="1" oninput="validasiInput(this)">
         </div>
         
         <div class="input-group">
@@ -94,7 +94,7 @@
                 <option value="advalorem">Advalorem (dalam %)</option>
                 <option value="spesifik">Spesifik (dalam Rp per Satuan Barang)</option>
             </select>
-            <input type="number" id="bm_mfn">
+            <input type="number" id="bm_mfn" placeholder="Masukkan tarif Bea Masuk MFN" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="button-group">
@@ -107,12 +107,12 @@
                 <option value="advalorem">Advalorem (dalam %)</option>
                 <option value="spesifik">Spesifik (dalam Rp per Satuan Barang)</option>
             </select>
-            <input type="number" id="bm_tambahan">
+            <input type="number" id="bm_tambahan" placeholder="Masukkan tarif Bea Masuk Tambahan" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="input-group">
             <label>Kurs Pajak (dalam Rp per 1 USD):</label>
-            <input type="number" id="kurs_pajak">
+            <input type="number" id="kurs_pajak" placeholder="Masukkan kurs pajak" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="button-group">
@@ -121,17 +121,17 @@
         
         <div class="input-group">
             <label>Tarif PPN (dalam %):</label>
-            <input type="number" id="ppn">
+            <input type="number" id="ppn" placeholder="Masukkan tarif PPN" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="input-group">
             <label>Tarif PPnBM (dalam %):</label>
-            <input type="number" id="ppnbm">
+            <input type="number" id="ppnbm" placeholder="Masukkan tarif PPnBM" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="input-group">
             <label>Tarif PPh Pasal 22 (dalam %):</label>
-            <input type="number" id="pph22">
+            <input type="number" id="pph22" placeholder="Masukkan tarif PPh Pasal 22" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <button onclick="hitungImpor()">Hitung</button>
