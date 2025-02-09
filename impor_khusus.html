@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Impor Khusus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff7f00;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kalkulator Impor Barang Niaga</h2>
+        
+        <div class="input-group">
+            <label>CIF (USD):</label>
+            <input type="number" id="cif">
+        </div>
+        
+        <div class="input-group">
+            <label>Jumlah Satuan Barang:</label>
+            <input type="number" id="jumlah">
+        </div>
+        
+        <div class="input-group">
+            <label>Tarif BM MFN:</label>
+            <select id="bm_mfn_type">
+                <option value="advalorem">Advalorem (%)</option>
+                <option value="spesifik">Spesifik (Rp)</option>
+            </select>
+            <input type="number" id="bm_mfn">
+        </div>
+        
+        <div class="button-group">
+            <button onclick="window.open('https://insw.go.id/intr/', '_blank')">Cek Tarif MFN</button>
+        </div>
+        
+        <div class="input-group">
+            <label>Tarif BM Tambahan:</label>
+            <select id="bm_tambahan_type">
+                <option value="advalorem">Advalorem (%)</option>
+                <option value="spesifik">Spesifik (Rp)</option>
+            </select>
+            <input type="number" id="bm_tambahan">
+        </div>
+        
+        <div class="input-group">
+            <label>Kurs Pajak (Rp per 1 USD):</label>
+            <input type="number" id="kurs_pajak">
+        </div>
+        
+        <div class="button-group">
+            <button onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Cek Kurs Pajak</button>
+        </div>
+        
+        <div class="input-group">
+            <label>Tarif PPN (%):</label>
+            <input type="number" id="ppn">
+        </div>
+        
+        <div class="input-group">
+            <label>Tarif PPnBM (%):</label>
+            <input type="number" id="ppnbm">
+        </div>
+        
+        <div class="input-group">
+            <label>Tarif PPh Pasal 22 (%):</label>
+            <input type="number" id="pph22">
+        </div>
+        
+        <button onclick="hitungImpor()">Hitung</button>
+        
+        <h3>Hasil Perhitungan</h3>
+        <table>
+            <tbody id="hasil"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function hitungImpor() {
+            let cif = parseFloat(document.getElementById('cif').value) || 0;
+            let jumlah = parseFloat(document.getElementById('jumlah').value) || 0;
+            let kurs = parseFloat(document.getElementById('kurs_pajak').value) || 0;
+            let ndpbm = cif * kurs;
+            
+            let bm_mfn_type = document.getElementById('bm_mfn_type').value;
+            let bm_mfn = parseFloat(document.getElementById('bm_mfn').value) || 0;
+            let bea_masuk = bm_mfn_type === 'advalorem' ? ndpbm * (bm_mfn / 100) : bm_mfn * jumlah;
+            let bea_masuk_bulat = Math.ceil(bea_masuk / 1000) * 1000;
+            
+            let bm_tambahan_type = document.getElementById('bm_tambahan_type').value;
+            let bm_tambahan = parseFloat(document.getElementById('bm_tambahan').value) || 0;
+            let bea_masuk_tambahan = bm_tambahan_type === 'advalorem' ? ndpbm * (bm_tambahan / 100) : bm_tambahan * jumlah;
+            let bea_masuk_tambahan_bulat = Math.ceil(bea_masuk_tambahan / 1000) * 1000;
+            
+            let nilai_impor = ndpbm + bea_masuk + bea_masuk_tambahan;
+            let ppn = Math.floor(nilai_impor * (parseFloat(document.getElementById('ppn').value) || 0) / 100);
+            let ppnbm = Math.floor(nilai_impor * (parseFloat(document.getElementById('ppnbm').value) || 0) / 100);
+            let nilai_impor_bulat = Math.floor(nilai_impor / 1000) * 1000;
+            let pph22 = Math.floor(nilai_impor_bulat * (parseFloat(document.getElementById('pph22').value) || 0) / 100);
+            
+            let total_pdri = ppn + ppnbm + pph22;
+            let total_biaya = bea_masuk_bulat + bea_masuk_tambahan_bulat + total_pdri;
+            
+            document.getElementById('hasil').innerHTML = `
+                <tr><td>NDPBM</td><td>Rp ${ndpbm.toLocaleString()}</td></tr>
+                <tr><td>Bea Masuk</td><td>Rp ${bea_masuk_bulat.toLocaleString()}</td></tr>
+                <tr><td>Bea Masuk Tambahan</td><td>Rp ${bea_masuk_tambahan_bulat.toLocaleString()}</td></tr>
+                <tr><td>PPN</td><td>Rp ${ppn.toLocaleString()}</td></tr>
+                <tr><td>PPnBM</td><td>Rp ${ppnbm.toLocaleString()}</td></tr>
+                <tr><td>PPh Pasal 22</td><td>Rp ${pph22.toLocaleString()}</td></tr>
+                <tr><td>Total Bea Masuk + PDRI</td><td>Rp ${total_biaya.toLocaleString()}</td></tr>
+            `;
+        }
+    </script>
+</body>
+</html>
