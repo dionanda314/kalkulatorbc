@@ -59,8 +59,19 @@
             cursor: pointer;
             margin-top: 15px;
         }
-        button:hover {
-            background-color: #e6c200;
+        .btn-hitung {
+            background: #FFD700;
+            color: black;
+        }
+        .btn-hitung:hover {
+            background: #FFC107;
+        }
+        .btn-link {
+            background: #007BFF;
+            color: white;
+        }
+        .btn-link:hover {
+            background: #0056b3;
         }
         table {
             width: 100%;
@@ -103,10 +114,6 @@
             <input type="number" id="bm_mfn" placeholder="Masukkan tarif Bea Masuk MFN" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
-        <div class="button-group">
-            <button onclick="window.open('https://insw.go.id/intr/', '_blank')">Cek Tarif MFN</button>
-        </div>
-        
         <div class="input-group">
             <label>Tarif BM Tambahan:</label>
             <select id="bm_tambahan_type">
@@ -116,13 +123,17 @@
             <input type="number" id="bm_tambahan" placeholder="Masukkan tarif Bea Masuk Tambahan" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
+        <div class="button-group">
+            <button class="btn-link" onclick="window.open('https://insw.go.id/intr/', '_blank')">Cek Tarif MFN</button>
+        </div>
+
         <div class="input-group">
             <label>Kurs Pajak (dalam Rp per 1 USD):</label>
             <input type="number" id="kurs_pajak" placeholder="Masukkan kurs pajak" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="button-group">
-            <button onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Cek Kurs Pajak</button>
+            <button class="btn-link" onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Cek Kurs Pajak</button>
         </div>
         
         <div class="input-group">
@@ -140,7 +151,7 @@
             <input type="number" id="pph22" placeholder="Masukkan tarif PPh Pasal 22" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
-        <button onclick="hitungImpor()">Hitung</button>
+        <button class="btn-hitung" onclick="hitungImpor()">Hitung</button>
         
         <div id="hasil"></div>
         
