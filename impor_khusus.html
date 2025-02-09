@@ -20,8 +20,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
-            background: #FFC000;
-            color: #203864;
+            background: #203864;
+            color: white;
             padding: 10px;
             border-radius: 5px;
         }
@@ -53,12 +53,14 @@
             width: 100%;
         }
         button {
-            background-color: #4472C4;
-            color: white;
+            background-color: #FFD700;
+            font-weight: bold;
+            border: none;
             cursor: pointer;
+            margin-top: 15px;
         }
         button:hover {
-            background-color: #203864;
+            background-color: #e6c200;
         }
         table {
             width: 100%;
@@ -85,7 +87,7 @@
         
         <div class="input-group">
             <label>Jumlah Satuan Barang:</label>
-            <input type="number" id="jumlah" placeholder="Masukkan jumlah satuan barang" min="0" step="1" oninput="validasiInput(this)">
+            <input type="number" id="jumlah" placeholder="Masukkan jumlah satuan barang" min="0" step="0.01" oninput="validasiInput(this)">
         </div>
         
         <div class="input-group">
