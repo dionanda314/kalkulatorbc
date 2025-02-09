@@ -74,6 +74,10 @@
             padding: 10px;
             text-align: left;
         }
+        th {
+            background: #203864;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -177,6 +181,7 @@
             document.getElementById('hasil').innerHTML = `
                 <h3>Hasil Perhitungan</h3>
                 <table>
+                    <tr><th>Keterangan</th><th>Nilai</th></tr>
                     <tr><td>NDPBM</td><td>Rp ${ndpbm.toLocaleString()}</td></tr>
                     <tr><td>Bea Masuk</td><td>Rp ${bea_masuk_bulat.toLocaleString()}</td></tr>
                     <tr><td>Bea Masuk Tambahan</td><td>Rp ${bea_masuk_tambahan_bulat.toLocaleString()}</td></tr>
