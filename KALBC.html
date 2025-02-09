@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Impor Barang Penumpang</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: linear-gradient(120deg, #007BFF, #FFD700);
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: auto;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .kurs-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .kurs-container button {
+            width: auto;
+            padding: 8px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .kurs-container button:hover {
+            background-color: #0056b3;
+        }
+        .hitung-btn {
+            background-color: #FFD700;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .hitung-btn:hover {
+            background-color: #e6c200;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #007BFF;
+            color: white;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kalkulator Impor Barang Penumpang</h2>
+
+        <label>Memiliki NPWP:</label>
+        <select id="npwp">
+            <option value="ya">Ya</option>
+            <option value="tidak">Tidak</option>
+        </select>
+
+        <label>Jumlah Penumpang:</label>
+        <input type="number" id="penumpang" placeholder="Masukkan jumlah penumpang" min="1" oninput="validasiInput(this)">
+
+        <label>CIF / Nilai Pabean (USD):</label>
+        <input type="number" id="cif" placeholder="Masukkan nilai CIF dalam USD" min="0" step="0.01" oninput="validasiInput(this)">
+
+        <label>Kurs Pajak (Rp per 1 USD):</label>
+        <div class="kurs-container">
+            <input type="number" id="kurs" placeholder="Masukkan kurs pajak" min="0" step="0.01" oninput="validasiInput(this)">
+            <button onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Lihat Kurs Pajak Terkini</button>
+        </div>
+
+        <button class="hitung-btn" onclick="hitungPajak()">Hitung</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function formatUang(angka, simbol) {
+            return simbol + " " + angka.toLocaleString("id-ID", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function validasiInput(input) {
+            if (input.value < 0) {
+                input.value = 0;
+            }
+        }
+
+        function hitungPajak() {
+            let npwp = document.getElementById("npwp").value;
+            let penumpang = parseInt(document.getElementById("penumpang").value);
+            let cif = parseFloat(document.getElementById("cif").value);
+            let kurs = parseFloat(document.getElementById("kurs").value);
+
+            if (isNaN(penumpang) || isNaN(cif) || isNaN(kurs) || penumpang < 1) {
+                alert("Harap isi semua kolom dengan angka yang valid.");
+                return;
+            }
+
+            // Pembebasan
+            let pembebasan = penumpang * 500;
+            let nilaiPabeanUSD = Math.max(cif - pembebasan, 0);
+            let ndpbm = nilaiPabeanUSD * kurs;
+
+            // Bea Masuk
+            let beaMasuk = 0.1 * ndpbm;
+            let beaMasukPerluDibayarkan = Math.ceil(beaMasuk / 1000) * 1000;
+
+            // Nilai Impor sebelum pembulatan
+            let nilaiImpor = ndpbm + beaMasuk;
+
+            // PPN
+            let ppn = 0.11 * nilaiImpor;
+            let ppnPerluDibayarkan = Math.floor(ppn);
+
+            // PPh Pasal 22
+            let pphTarif = npwp === "ya" ? 0.075 : 0.15;
+            let nilaiImporDibulatkan = Math.floor(nilaiImpor / 1000) * 1000;
+            let pphPerluDibayarkan = pphTarif * nilaiImporDibulatkan;
+
+            // Total PDRI
+            let totalPDRI = ppnPerluDibayarkan + pphPerluDibayarkan;
+
+            // Total Bea Masuk + PDRI
+            let totalBM_PDRI = beaMasukPerluDibayarkan + totalPDRI;
+
+            // Menampilkan hasil dalam tabel
+            document.getElementById("result").innerHTML = `
+                <h3>Hasil Perhitungan</h3>
+                <table>
+                    <tr><th>Keterangan</th><th>Nilai</th></tr>
+                    <tr><td>CIF / Nilai Pabean (dalam USD)</td><td>${formatUang(cif, "USD")}</td></tr>
+                    <tr><td>Pembebasan (${penumpang} Penumpang)</td><td>${formatUang(pembebasan, "USD")}</td></tr>
+                    <tr><td>NDPBM (dalam USD)</td><td>${formatUang(nilaiPabeanUSD, "USD")}</td></tr>
+                    <tr><td>NDPBM (dalam Rp)</td><td>${formatUang(ndpbm, "Rp")}</td></tr>
+                    <tr><td>Bea Masuk (10%)</td><td>${formatUang(beaMasuk, "Rp")}</td></tr>
+                    <tr><td>Bea Masuk Perlu Dibayarkan</td><td class="highlight">${formatUang(beaMasukPerluDibayarkan, "Rp")}</td></tr>
+                    <tr><td>Nilai Impor</td><td>${formatUang(nilaiImpor, "Rp")}</td></tr>
+                    <tr><td>PPN Perlu Dibayarkan (11%)</td><td>${formatUang(ppnPerluDibayarkan, "Rp")}</td></tr>
+                    <tr><td>PPh Pasal 22 Perlu Dibayarkan (${pphTarif * 100}%)</td><td>${formatUang(pphPerluDibayarkan, "Rp")}</td></tr>
+                    <tr><td>Total PDRI Perlu Dibayarkan</td><td class="highlight">${formatUang(totalPDRI, "Rp")}</td></tr>
+                    <tr><td><strong>Total Bea Masuk + PDRI Perlu Dibayarkan</strong></td><td class="highlight"><strong>${formatUang(totalBM_PDRI, "Rp")}</strong></td></tr>
+                </table>
+            `;
+        }
+    </script>
+</body>
+</html>
