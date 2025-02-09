@@ -138,9 +138,8 @@
         
         <button onclick="hitungImpor()">Hitung</button>
         
-        <table>
-            <tbody id="hasil"></tbody>
-        </table>
+        <div id="hasil"></div>
+        
     </div>
 
     <script>
@@ -177,13 +176,14 @@
             
             document.getElementById('hasil').innerHTML = `
                 <h3>Hasil Perhitungan</h3>
-                <tr><td>NDPBM</td><td>Rp ${ndpbm.toLocaleString()}</td></tr>
-                <tr><td>Bea Masuk</td><td>Rp ${bea_masuk_bulat.toLocaleString()}</td></tr>
-                <tr><td>Bea Masuk Tambahan</td><td>Rp ${bea_masuk_tambahan_bulat.toLocaleString()}</td></tr>
-                <tr><td>PPN</td><td>Rp ${ppn.toLocaleString()}</td></tr>
-                <tr><td>PPnBM</td><td>Rp ${ppnbm.toLocaleString()}</td></tr>
-                <tr><td>PPh Pasal 22</td><td>Rp ${pph22.toLocaleString()}</td></tr>
-                <tr><td>Total Bea Masuk + PDRI</td><td>Rp ${total_biaya.toLocaleString()}</td></tr>
+                <table>
+                    <tr><td>NDPBM</td><td>Rp ${ndpbm.toLocaleString()}</td></tr>
+                    <tr><td>Bea Masuk</td><td>Rp ${bea_masuk_bulat.toLocaleString()}</td></tr>
+                    <tr><td>Bea Masuk Tambahan</td><td>Rp ${bea_masuk_tambahan_bulat.toLocaleString()}</td></tr>
+                    <tr><td>PPN</td><td>Rp ${ppn.toLocaleString()}</td></tr>
+                    <tr><td>PPnBM</td><td>Rp ${ppnbm.toLocaleString()}</td></tr>
+                    <tr><td>PPh Pasal 22</td><td>Rp ${pph22.toLocaleString()}</td></tr>
+                    <tr><td>Total Bea Masuk + PDRI</td><td>Rp ${total_biaya.toLocaleString()}</td></tr>
             `;
         }
     </script>
