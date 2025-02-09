@@ -82,7 +82,8 @@
             text-align: left;
         }
         th {
-            background: #E3F2FD;
+            background: #203864;
+            color: white;
         }
     </style>
 </head>
@@ -110,8 +111,9 @@
             <button class="btn-kurs" onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Cek Kurs Pajak</button>
             <button class="btn-hitung" onclick="hitung()">Hitung</button>
         </div>
-
+        
         <table id="hasilTable" style="display:none;">
+            <h3>Hasil Perhitungan</h3>
             <tr><th>Keterangan</th><th>Nilai</th></tr>
             <tr><td>CIF / Nilai Pabean (dalam USD)</td><td id="cif"></td></tr>
             <tr><td>NDPBM (dalam Rp)</td><td id="ndpbmRp"></td></tr>
