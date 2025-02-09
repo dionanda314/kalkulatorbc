@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Impor Barang Kiriman</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        h2 {
+            background: #004085;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            width: 80%;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 60%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: right;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            width: 45%;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-hitung {
+            background: #FFD700;
+            color: black;
+        }
+        .btn-hitung:hover {
+            background: #FFC107;
+        }
+        .btn-kurs {
+            background: #007BFF;
+            color: white;
+        }
+        .btn-kurs:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #E3F2FD;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Kalkulator Impor Barang Kiriman</h2>
+
+        <div class="form-group">
+            <label>FOB (dalam USD, maksimal 1500):</label>
+            <input type="number" id="fob" min="0" max="1500" step="0.01" oninput="validateInput(this)">
+        </div>
+
+        <div class="form-group">
+            <label>Insurance and Freight (dalam USD):</label>
+            <input type="number" id="insuranceFreight" min="0" step="0.01" oninput="validateInput(this)">
+        </div>
+
+        <div class="form-group">
+            <label>Kurs Pajak (dalam Rp per 1 USD):</label>
+            <input type="number" id="kurs" min="0" step="0.01" oninput="validateInput(this)">
+        </div>
+
+        <div class="btn-container">
+            <button class="btn-kurs" onclick="window.open('https://fiskal.kemenkeu.go.id/informasi-publik/kurs-pajak', '_blank')">Cek Kurs Pajak</button>
+            <button class="btn-hitung" onclick="hitung()">Hitung</button>
+        </div>
+
+        <table id="hasilTable" style="display:none;">
+            <tr><th>Keterangan</th><th>Nilai</th></tr>
+            <tr><td>CIF / Nilai Pabean (dalam USD)</td><td id="cif"></td></tr>
+            <tr><td>NDPBM (dalam Rp)</td><td id="ndpbmRp"></td></tr>
+            <tr><td id="beaMasukLabel"></td><td id="beaMasuk"></td></tr>
+            <tr><td>Bea Masuk Perlu Dibayarkan</td><td id="beaMasukBayar"></td></tr>
+            <tr><td>Nilai Impor</td><td id="nilaiImpor"></td></tr>
+            <tr><td>PPN Perlu Dibayarkan (11%)</td><td id="ppnBayar"></td></tr>
+            <tr><td>Total Bea Masuk + PPN Perlu Dibayarkan</td><td id="total"></td></tr>
+        </table>
+    </div>
+
+    <script>
+        function validateInput(input) {
+            if (input.value < 0) {
+                input.value = 0;  // Jika input negatif, otomatis diubah menjadi 0
+            }
+            if (input.id === "fob" && input.value > 1500) {
+                input.value = 1500;  // Jika FOB melebihi 1500, otomatis diubah menjadi 1500
+            }
+        }
+
+        function formatCurrency(value, currency = "Rp") {
+            return currency + " " + value.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function hitung() {
+            let fob = parseFloat(document.getElementById("fob").value) || 0;
+            let insuranceFreight = parseFloat(document.getElementById("insuranceFreight").value) || 0;
+            let kurs = parseFloat(document.getElementById("kurs").value) || 0;
+
+            let cif = fob + insuranceFreight;
+            let ndpbmRp = cif * kurs;
+
+            // Penentuan tarif Bea Masuk
+            let tarifBeaMasuk = fob > 3 ? 0.075 : 0; // Jika FOB > 3, tarif 7.5%, jika ≤ 3, tarif 0%
+            let beaMasuk = ndpbmRp * tarifBeaMasuk;
+            let beaMasukBayar = Math.ceil(beaMasuk / 1000) * 1000;
+
+            let nilaiImpor = ndpbmRp + beaMasuk;
+            let ppn = nilaiImpor * 0.11;
+            let ppnBayar = Math.floor(ppn); // Dibulatkan ke bawah
+
+            let total = beaMasukBayar + ppnBayar;
+
+            document.getElementById("cif").innerText = formatCurrency(cif, "USD");
+            document.getElementById("ndpbmRp").innerText = formatCurrency(ndpbmRp);
+            
+            // Perbaikan keterangan "Bea Masuk (X%)"
+            let beaMasukLabel = "Bea Masuk (" + (tarifBeaMasuk * 100) + "%)";
+            document.getElementById("beaMasukLabel").innerText = beaMasukLabel;
+
+            document.getElementById("beaMasuk").innerText = formatCurrency(beaMasuk);
+            document.getElementById("beaMasukBayar").innerText = formatCurrency(beaMasukBayar);
+            document.getElementById("nilaiImpor").innerText = formatCurrency(nilaiImpor);
+            document.getElementById("ppnBayar").innerText = formatCurrency(ppnBayar);
+            document.getElementById("total").innerText = formatCurrency(total);
+
+            document.getElementById("hasilTable").style.display = "table";
+        }
+    </script>
+
+</body>
+</html>
