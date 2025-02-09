@@ -82,10 +82,6 @@
             background: #203864;
             color: white;
         }
-        .highlight {
-            font-weight: bold;
-            color: #d9534f;
-        }
     </style>
 </head>
 <body>
@@ -178,7 +174,7 @@
                     <tr><td>PPN Perlu Dibayarkan (11%)</td><td>${formatUang(ppnPerluDibayarkan, "Rp")}</td></tr>
                     <tr><td>PPh Pasal 22 Perlu Dibayarkan (${pphTarif * 100}%)</td><td>${formatUang(pphPerluDibayarkan, "Rp")}</td></tr>
                     <tr><td>Total PDRI Perlu Dibayarkan</td><td>${formatUang(totalPDRI, "Rp")}</td></tr>
-                    <tr><td><strong>Total Bea Masuk + PDRI Perlu Dibayarkan</strong></td><td class="highlight"><strong>${formatUang(totalBM_PDRI, "Rp")}</strong></td></tr>
+                    <tr><td>Total Bea Masuk + PDRI Perlu Dibayarkan</td><td>${formatUang(totalBM_PDRI, "Rp")}</td></tr>
                 </table>
             `;
         }
