@@ -138,7 +138,6 @@
         
         <button onclick="hitungImpor()">Hitung</button>
         
-        <h3>Hasil Perhitungan</h3>
         <table>
             <tbody id="hasil"></tbody>
         </table>
@@ -177,6 +176,7 @@
             let total_biaya = bea_masuk_bulat + bea_masuk_tambahan_bulat + total_pdri;
             
             document.getElementById('hasil').innerHTML = `
+                <h3>Hasil Perhitungan</h3>
                 <tr><td>NDPBM</td><td>Rp ${ndpbm.toLocaleString()}</td></tr>
                 <tr><td>Bea Masuk</td><td>Rp ${bea_masuk_bulat.toLocaleString()}</td></tr>
                 <tr><td>Bea Masuk Tambahan</td><td>Rp ${bea_masuk_tambahan_bulat.toLocaleString()}</td></tr>
